@@ -24,9 +24,9 @@ class MoneyConfettiField extends StatelessWidget {
     Color(0xFFFFA726),
   ];
 
-  /// Nearly straight up, slight tilt toward top-center.
-  static const double _blastFromLeft = -math.pi / 2 + 0.22;
-  static const double _blastFromRight = -math.pi / 2 - 0.22;
+  /// Upward with stronger tilt so both sides converge on top-center.
+  static const double _blastFromLeft = -math.pi / 2 + 0.32;
+  static const double _blastFromRight = -math.pi / 2 - 0.32;
 
   @override
   Widget build(BuildContext context) {
@@ -68,10 +68,10 @@ class MoneyConfettiField extends StatelessWidget {
       blastDirection: blastDirection,
       emissionFrequency: 1,
       numberOfParticles: 10,
-      minBlastForce: 48,
-      maxBlastForce: 62,
-      gravity: 0.07,
-      particleDrag: 0.14,
+      minBlastForce: 100,
+      maxBlastForce: 180,
+      gravity: 0.3,
+      particleDrag: 0.09,
       shouldLoop: false,
       displayTarget: false,
       pauseEmissionOnLowFrameRate: false,
