@@ -41,12 +41,21 @@ class _MoneyScreenState extends State<MoneyScreen>
       (_) => ConfettiController(duration: _confettiBurstDuration),
     );
     _intro.controller.addListener(_syncConfettiToIntro);
-    WidgetsBinding.instance.addPostFrameCallback((_) => _intro.play());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Cold starts can jank the first frame; begin intro after a tiny buffer
+      // so confetti is emitted only once the scene is laid out.
+      Future.delayed(const Duration(milliseconds: 120), () {
+        if (!mounted) return;
+        _intro.play();
+      });
+    });
   }
 
   /// Single burst when wallet appears; arc up to top then down within 2s.
   void _syncConfettiToIntro() {
-    if (_confettiFired || _intro.controller.value < 0.04) return;
+    // Trigger slightly later in the intro to avoid missing the burst
+    // during app cold-start frame stabilization.
+    if (_confettiFired || _intro.controller.value < 0.08) return;
 
     _confettiFired = true;
     for (final c in _confettiControllers) {
