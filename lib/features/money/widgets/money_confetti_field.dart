@@ -35,24 +35,35 @@ class MoneyConfettiField extends StatelessWidget {
     }
 
     return IgnorePointer(
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: _emitter(
-              controller: controllers[0],
-              blastDirection: _blastFromLeft,
+      child: ShaderMask(
+        // Keep particles fully visible in the upper area, then fade them out
+        // around mid-screen while they fall down.
+        shaderCallback: (rect) => const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          stops: [0.0, 0.44, 0.62],
+          colors: [Colors.white, Colors.white, Colors.transparent],
+        ).createShader(rect),
+        blendMode: BlendMode.dstIn,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: _emitter(
+                controller: controllers[0],
+                blastDirection: _blastFromLeft,
+              ),
             ),
-          ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: _emitter(
-              controller: controllers[1],
-              blastDirection: _blastFromRight,
+            Align(
+              alignment: Alignment.centerRight,
+              child: _emitter(
+                controller: controllers[1],
+                blastDirection: _blastFromRight,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

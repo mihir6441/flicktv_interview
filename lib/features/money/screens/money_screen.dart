@@ -26,6 +26,7 @@ class _MoneyScreenState extends State<MoneyScreen>
     with TickerProviderStateMixin {
   static const int _confettiEmitterCount = 2;
   static const _confettiBurstDuration = Duration(seconds: 2);
+  static const _confettiVisibleDuration = Duration(seconds: 1);
 
   late final MoneyIntroAnimation _intro;
   late final List<ConfettiController> _confettiControllers;
@@ -70,8 +71,8 @@ class _MoneyScreenState extends State<MoneyScreen>
       }
     });
 
-    // Clear everything after 2 seconds (full up + down cycle).
-    Future.delayed(_confettiBurstDuration, () {
+    // Clear at roughly halfway through the controller duration.
+    Future.delayed(_confettiVisibleDuration, () {
       if (!mounted) return;
       for (final c in _confettiControllers) {
         c.stop(clearAllParticles: true);
@@ -363,17 +364,14 @@ class _ClaimGiftCardTile extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: const Color(0xFF141414),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: const Icon(
-              Icons.card_giftcard_rounded,
-              color: AppColors.walletGold,
-              size: 22,
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.asset(
+              'assets/icons/gift_card.png',
+              width: 40,
+              height: 40,
+              fit: BoxFit.cover,
+              filterQuality: FilterQuality.high,
             ),
           ),
           const SizedBox(width: 12),
